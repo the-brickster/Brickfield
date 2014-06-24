@@ -1,8 +1,8 @@
 Brickfield
 ==========
 
-Attempt at a voxel based shooter using Panda3d</br>
-Needs the following Python packages</br>
+Attempt at a voxel based shooter using Panda3d 
+Needs the following Python packages 
 + Panda3d
 + Numpy
 + noise
@@ -14,5 +14,5 @@ Sample 256x256 voxel map
 
 TODO
 ==========
--Fix lighting issues
--Add global lighting
++ Fix lighting issues
++ Add global lighting
