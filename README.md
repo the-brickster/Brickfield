@@ -2,6 +2,10 @@ Brickfield
 ==========
 
 Attempt at a voxel based shooter using Panda3d
+Needs the following Python packages
+-Panda3d
+-Numpy
+-noise
 
 Screenshot
 ==========
