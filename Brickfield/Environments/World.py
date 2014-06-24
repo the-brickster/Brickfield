@@ -7,18 +7,19 @@ http://studentgamedev.blogspot.no/2013/08/unity-voxel-tutorial-part-1-generating
 '''
 import numpy as np
 import Chunk
-from noise import snoise3
+
 from direct.directbase import DirectStart
 from panda3d.core import *
-from noise import pnoise3
+from noise import pnoise2
 from random import randint
+from numpy import math
 class World(object):
     '''
     World Class
     '''
-    worldX = 128
-    worldY = 128
-    worldZ = 32
+    worldX = 256
+    worldY = 256
+    worldZ = 16
     chunkSize = 16
 
     def __init__(self):
@@ -26,16 +27,23 @@ class World(object):
         Constructor
         '''
         self.data = np.zeros([self.worldX,self.worldY,self.worldZ], dtype=int)
-
+        octaves = 2
+        freq = 16.0 * octaves
         for x in range(0,self.worldX):
             for y in range(0,self.worldY):
+                zVal = int(pnoise2(x / freq, y / freq, octaves) * 15.0 + 10.0)
+                print zVal
                 for z in range(0,self.worldZ):
-                    zVal = randint(0,3)
                     if(z<=zVal):
                         self.data[x][y][z] = 1 #for now all blocks below 1 will be stone, aka 1
 
     def PerlinNoise(self, x, y, z, scale, height, power):
-        rValue = 0
+        rValue = float(0)
+        scale = float(scale)
+        height = float(height)
+
+        rValue*=((height-1)+height)
+        return int(rValue)
 
     def Block(self, x, y, z):
         if(x>= self.worldX or x < 0 or y >= self.worldY or y < 0 or z >= self.worldZ or z < 0):
@@ -64,9 +72,7 @@ class World(object):
         xCord = self.worldX/self.chunkSize
         yCord = self.worldY/self.chunkSize
         zCord = self.worldZ/self.chunkSize
-        print xCord
-        print yCord
-        print zCord
+
         for x in range(0,xCord):
             for y in range(0,yCord):
                 for z in range(0,zCord):
@@ -82,6 +88,7 @@ class World(object):
 if __name__ == '__main__':
     worldTest = World()
     worldTest.GenWorld()
+    print worldTest.PerlinNoise(1, 2, 3, 128, 1, 2)
     slight = Spotlight('slight')
     slight.setColor(Vec4(1, 1, 1, 1))
     slnp1= render.attachNewNode(slight)
