@@ -44,27 +44,27 @@ class Chunk(object):
                     if(self.Block(x,y,z) != 0):
                         #block is a solid
                         if(self.Block(x,y+1,z) == 0):
-                            self.cubeModel.makeFrontFace(x, y, z, [0,162,44,1])
+                            self.cubeModel.makeFrontFace(x+self.chunkX,y+self.chunkY,z+self.chunkZ, [r,g,b,1])
 
                         if(self.Block(x,y-1,z) == 0):
-                            self.cubeModel.makeBackFace(x, y, z, [0,162,44,1])
+                            self.cubeModel.makeBackFace(x+self.chunkX,y+self.chunkY,z+self.chunkZ, [r,g,b,1])
 
                         if(self.Block(x+1,y,z) == 0):
-                            self.cubeModel.makeRightFace(x, y, z, [0,162,44,11])
+                            self.cubeModel.makeRightFace(x+self.chunkX,y+self.chunkY,z+self.chunkZ, [r,g,b,11])
 
                         if(self.Block(x-1,y,z) == 0):
-                            self.cubeModel.makeLeftFace(x, y, z, [0,162,44,1])
+                            self.cubeModel.makeLeftFace(x+self.chunkX,y+self.chunkY,z+self.chunkZ, [r,g,b,1])
 
                         if(self.Block(x,y,z+1) == 0):
                             counter+=1
-                            self.cubeModel.makeTopFace(x, y, z, [0,162,44,1])
+                            self.cubeModel.makeTopFace(x+self.chunkX,y+self.chunkY,z+self.chunkZ, [r,g,b,1])
 
                         if(self.Block(x,y,z-1) == 0):
-                            self.cubeModel.makeBottomFace(x, y, z, [0,162,44,1])
+                            self.cubeModel.makeBottomFace(x+self.chunkX,y+self.chunkY,z+self.chunkZ, [r,g,b,1])
 
         #print "Made Chunk with: "+str(counter)+" faces"
         self.np = renderNode.attachNewNode(self.cubeModel.getGeomNode())
-        self.np.set_pos(self.chunkX,self.chunkY,self.chunkZ)
+        #self.np.set_pos(self.chunkX,self.chunkY,self.chunkZ)
 
 
     def Block(self,x,y,z):

@@ -17,9 +17,9 @@ class World(object):
     '''
     World Class
     '''
-    worldX = 256
-    worldY = 256
-    worldZ = 16
+    worldX = 128
+    worldY = 128
+    worldZ = 32
     chunkSize = 16
 
     def __init__(self):
@@ -32,10 +32,12 @@ class World(object):
         for x in range(0,self.worldX):
             for y in range(0,self.worldY):
                 zVal = int(pnoise2(x / freq, y / freq, octaves) * 15.0 + 10.0)
-                print zVal
+                #print zVal
                 for z in range(0,self.worldZ):
                     if(z<=zVal):
                         self.data[x][y][z] = 1 #for now all blocks below 1 will be stone, aka 1
+    def genNormals(self):
+        return NotImplemented
 
     def PerlinNoise(self, x, y, z, scale, height, power):
         rValue = float(0)
@@ -88,13 +90,24 @@ class World(object):
 if __name__ == '__main__':
     worldTest = World()
     worldTest.GenWorld()
-    print worldTest.PerlinNoise(1, 2, 3, 128, 1, 2)
-    slight = Spotlight('slight')
-    slight.setColor(Vec4(1, 1, 1, 1))
+
+    slight = AmbientLight('alight')
+    slight.setColor(Vec4(0.2, 0.2, 0.2, 1))
     slnp1= render.attachNewNode(slight)
     render.setLight(slnp1)
-    slnp1.setPos(0,0,1000)
-    slnp1.lookAt(Point3(50, 0, 0))
+
+    dlight = DirectionalLight('dlight')
+    dlight.set_color(Vec4(0.8, 0.8, 0.5, 1))
+    dlnp = render.attachNewNode(dlight)
+    dlnp.setHpr(0, -180, 0)
+    render.setLight(dlnp)
+
+    dlight2 = PointLight('dlight2')
+    dlight2.set_color(Vec4(0.8, 0.8, 0.5, 1))
+    dlnp1 = render.attachNewNode(dlight2)
+    dlnp1.setHpr(0, -180, 60)
+    render.setLight(dlnp1)
+
     run()
 
 

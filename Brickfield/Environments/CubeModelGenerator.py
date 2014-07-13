@@ -6,7 +6,7 @@ Created on May 6, 2014
 from panda3d.core import Texture, GeomNode, GeomVertexFormat, GeomVertexData, Geom, GeomTriangles, GeomVertexFormat,GeomVertexWriter, Vec3, Vec4, Point3
 import time
 
-def myNormalize(myVec):
+def CalcSufaceNormal(myVec):
     myVec.normalize()
     return myVec
 
@@ -31,13 +31,13 @@ class MeshGenerator(object):
         self.vertexData = GeomVertexData(name, self.format, Geom.UHStream)
 
         self.mesh = Geom(self.vertexData)
-        self.triangles = GeomTriangles(Geom.UHStatic)
+        self.triangles = GeomTriangles(Geom.UHStream)
         self.triangleData = self.triangles.modifyVertices()
 
         self.vertex = GeomVertexWriter(self.vertexData, 'vertex')
         self.normal = GeomVertexWriter(self.vertexData, 'normal')
         self.color = GeomVertexWriter(self.vertexData, 'color')
-        self.texcoord = GeomVertexWriter(self.vertexData, 'texcoord')
+        #self.texcoord = GeomVertexWriter(self.vertexData, 'texcoord')
 
         self.faceCount = 0
 
@@ -51,10 +51,18 @@ class MeshGenerator(object):
             self.vertex.addData3f(x2, y2, z2)
             self.vertex.addData3f(x1, y2, z2)
 
-            self.normal.addData3f(myNormalize(Vec3(2*x1-1, 2*y1-1, 2*z1-1)))
-            self.normal.addData3f(myNormalize(Vec3(2*x2-1, 2*y1-1, 2*z1-1)))
-            self.normal.addData3f(myNormalize(Vec3(2*x2-1, 2*y2-1, 2*z2-1)))
-            self.normal.addData3f(myNormalize(Vec3(2*x1-1, 2*y2-1, 2*z2-1)))
+            vector1 = Vec3(x1, y1, z1)
+            vector2 = Vec3(x2, y1, z1)
+            vector3 = Vec3(x2, y2, z2)
+            
+            normalVector1 = vector3-vector1
+            normalVector2 = vector2-vector1
+            normalVector2.cross(normalVector1)
+
+            self.normal.addData3f(CalcSufaceNormal(normalVector2))
+            self.normal.addData3f(CalcSufaceNormal(normalVector2))
+            self.normal.addData3f(CalcSufaceNormal(normalVector2))
+            self.normal.addData3f(CalcSufaceNormal(normalVector2))
 
         else:
 
@@ -62,11 +70,19 @@ class MeshGenerator(object):
             self.vertex.addData3f(x2, y2, z1)
             self.vertex.addData3f(x2, y2, z2)
             self.vertex.addData3f(x1, y1, z2)
+            
+            vector1 = Vec3(x1, y1, z1)
+            vector2 = Vec3(x2, y2, z1)
+            vector3 = Vec3(x2, y2, z2)
+            
+            normalVector1 = vector3-vector1
+            normalVector2 = vector2-vector1
+            normalVector2.cross(normalVector1)
 
-            self.normal.addData3f(myNormalize(Vec3(2*x1-1, 2*y1-1, 2*z1-1)))
-            self.normal.addData3f(myNormalize(Vec3(2*x2-1, 2*y2-1, 2*z1-1)))
-            self.normal.addData3f(myNormalize(Vec3(2*x2-1, 2*y2-1, 2*z2-1)))
-            self.normal.addData3f(myNormalize(Vec3(2*x1-1, 2*y1-1, 2*z2-1)))
+            self.normal.addData3f(CalcSufaceNormal(normalVector2))
+            self.normal.addData3f(CalcSufaceNormal(normalVector2))
+            self.normal.addData3f(CalcSufaceNormal(normalVector2))
+            self.normal.addData3f(CalcSufaceNormal(normalVector2))
 
         RGBAVal = convertToRGBA(color[0], color[1], color[2], color[3])
         self.color.addData4f(RGBAVal[0], RGBAVal[1], RGBAVal[2], RGBAVal[3])
@@ -110,6 +126,9 @@ class MeshGenerator(object):
         geomNode = GeomNode(self.name)
         geomNode.addGeom(self.mesh)
         return geomNode
+
+
+
 
 if __name__ == '__main__':
     mesh = MeshGenerator()
